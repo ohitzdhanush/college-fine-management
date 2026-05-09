@@ -1,8 +1,11 @@
+import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
+    await connectDB();
+
     const facultyFineStats = await User.aggregate([
       {
         $match: { role: "faculty" }, // Only faculty members

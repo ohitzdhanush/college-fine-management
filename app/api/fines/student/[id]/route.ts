@@ -1,4 +1,5 @@
 // app/api/fines/student/[id]/route.ts
+import { connectDB } from "@/lib/mongodb";
 import Fine from "@/models/Fine"; // adjust path to your Fine model
 import type { PipelineStage } from "mongoose";
 import { Types } from "mongoose";
@@ -18,6 +19,8 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
+    await connectDB();
+
     const studentId = params.id;
 
     // validate id

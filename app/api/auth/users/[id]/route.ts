@@ -1,4 +1,5 @@
 // app/api/users/[id]/route.ts
+import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
@@ -12,6 +13,8 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
+    await connectDB();
+
     const { id } = params;
     if (!isValidObjectId(id))
       return NextResponse.json({ message: "Invalid id" }, { status: 400 });
@@ -33,6 +36,8 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    await connectDB();
+
     const { id } = params;
     if (!isValidObjectId(id))
       return NextResponse.json({ message: "Invalid id" }, { status: 400 });
@@ -79,6 +84,8 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    await connectDB();
+
     const { id } = params;
     if (!isValidObjectId(id))
       return NextResponse.json({ message: "Invalid id" }, { status: 400 });

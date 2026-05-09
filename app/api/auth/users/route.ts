@@ -1,8 +1,11 @@
+import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
   try {
+    await connectDB();
+
     // Extract query parameters
     const { searchParams } = new URL(req.url);
     const department = searchParams.get("department");
@@ -31,6 +34,8 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
+    await connectDB();
+
     const { name, email, password, register_number, department, role } =
       await req.json();
 

@@ -1,4 +1,5 @@
 // app/api/run-fine-reminders/route.ts
+import { connectDB } from "@/lib/mongodb";
 import { sendFineReminderEmail } from "@/lib/email";
 import Fine from "@/models/Fine";
 import User from "@/models/User";
@@ -104,6 +105,8 @@ async function processFineReminder(fine: any) {
  */
 export async function GET() {
   try {
+    await connectDB();
+
     const today = new Date();
 
     // target = 3 days from now
@@ -158,6 +161,8 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    await connectDB();
+
     const body = await request.json().catch(() => ({}));
     const headerSecret = (request.headers.get("x-cron-secret") || "").trim();
     const suppliedSecret = headerSecret || body.secret;

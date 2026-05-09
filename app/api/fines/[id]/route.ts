@@ -1,4 +1,5 @@
 // app/api/fines/[id]/route.ts
+import { connectDB } from "@/lib/mongodb";
 import Fine from "@/models/Fine";
 import { NextResponse } from "next/server";
 
@@ -7,6 +8,8 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
+    await connectDB();
+
     const { id } = params;
     const fine = await Fine.findById(id)
       .populate("student", "-password -__v")
@@ -41,6 +44,8 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    await connectDB();
+
     const { id } = params;
     const body = await req.json();
 
@@ -85,6 +90,8 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    await connectDB();
+
     const { id } = params;
 
     const fine = await Fine.findByIdAndDelete(id);

@@ -12,28 +12,31 @@ declare global {
     | undefined;
 }
 
-const MONGODB_URI: any = process.env.MONGODB_URI;
-if (!MONGODB_URI) {
-  throw new Error(
-    "Please define the MONGODB_URI environment variable inside .env.local"
-  );
-}
-
 let cached =
   global._mongoose ?? (global._mongoose = { conn: null, promise: null });
 
 export async function connectDB(): Promise<typeof mongoose> {
+  const MONGODB_URI = process.env.MONGODB_URI;
+  if (!MONGODB_URI) {
+    throw new Error("MONGODB_URI environment variable is not configured");
+  }
+
   if (cached.conn) {
-    console.log("Using cached mongoose connection");
     return cached.conn;
   }
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI).then((mongoose) => {
-      console.log("MongoDB connected");
-      return mongoose;
-    });
+    cached.promise = mongoose
+      .connect(MONGODB_URI, {
+        serverSelectionTimeoutMS: 10000,
+      })
+      .then((mongoose) => mongoose)
+      .catch((error) => {
+        cached.promise = null;
+        throw error;
+      });
   }
+
   cached.conn = await cached.promise;
   return cached.conn;
 }

@@ -1,11 +1,5 @@
 import mongoose, { Document, Model } from "mongoose";
 import bcrypt from "bcrypt";
-import { connectDB } from "@/lib/mongodb";
-
-// ✅ Ensure MongoDB connection runs once when the model is imported
-connectDB().catch((err) => {
-  console.error("connectDB error:", err);
-});
 
 export interface IUser extends Document {
   name: string;

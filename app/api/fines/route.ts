@@ -1,4 +1,5 @@
 // app/api/fines/route.ts
+import { connectDB } from "@/lib/mongodb";
 import { sendFineNotificationEmail } from "@/lib/email";
 import Fine from "@/models/Fine";
 import User from "@/models/User";
@@ -10,6 +11,8 @@ function escapeRegex(str: string) {
 
 export async function GET(req: Request) {
   try {
+    await connectDB();
+
     const { searchParams } = new URL(req.url);
     const departmentRaw = searchParams.get("department");
 
@@ -55,6 +58,8 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
+    await connectDB();
+
     const body = await req.json();
 
     const {

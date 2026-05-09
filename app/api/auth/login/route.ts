@@ -1,10 +1,13 @@
 // app/api/auth/login/route.ts
 import { NextResponse } from "next/server";
 import { generateToken } from "@/lib/auth";
+import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 
 export async function POST(req: Request) {
   try {
+    await connectDB();
+
     const { email, password } = await req.json();
 
     if (!email || !password) {
